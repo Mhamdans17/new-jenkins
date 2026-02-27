@@ -23,10 +23,13 @@ pipeline {
             steps {
                 echo "Bikin Image dan Langsung Jalanin Container pakai Compose!"
                 
+                // Matikan paksa dan hapus kalau masih ada container sisa dari tes awal (docker run statis)
+                sh 'docker rm -f hello-jenkins-api || true'
+
                 // Matikan service lama kalau ada, lalu build ulang dan jalankan (-d)
                 sh 'docker-compose down'
                 sh 'docker-compose up -d --build'
-                                
+
                 echo "🚀 Aplikasi berhasil dijalankan dengan pesan kustom: ${MESSAGE}"
             }
         }
