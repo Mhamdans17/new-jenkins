@@ -7,6 +7,15 @@ services:
     ports:
       - "8000:8000"
     environment:
-      # Inject dari environment luar (Jenkins) ke dalam container
+      # Inject dari environment luar (Jenkins)
       - MESSAGE=${MESSAGE}
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    container_name: hello-jenkins-redis
+    ports:
+      - "6379:6379"
     restart: unless-stopped
