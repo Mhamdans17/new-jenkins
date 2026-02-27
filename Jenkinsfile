@@ -24,9 +24,9 @@ pipeline {
                 echo "Bikin Image dan Langsung Jalanin Container pakai Compose!"
                 
                 // Matikan service lama kalau ada, lalu build ulang dan jalankan (-d)
-                sh 'docker compose down'
-                sh 'docker compose up -d --build'
-                
+                sh 'docker-compose down'
+                sh 'docker-compose up -d --build'
+                                
                 echo "🚀 Aplikasi berhasil dijalankan dengan pesan kustom: ${MESSAGE}"
             }
         }
