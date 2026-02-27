@@ -1,7 +1,10 @@
+import os
 from fastapi import FastAPI
 
 app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"message": "Hello World! Aku API Python dari Jenkins."}
+    # Ambil pesan dari environment variable, kalau tidak ada pakai pesan default
+    pesan = os.getenv("MESSAGE", "Hello World! Message default nih dari Python.")
+    return {"message": pesan}

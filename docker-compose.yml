@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: hello-jenkins-api
+    ports:
+      - "8000:8000"
+    environment:
+      # Inject dari environment luar (Jenkins) ke dalam container
+      - MESSAGE=${MESSAGE}
+    restart: unless-stopped

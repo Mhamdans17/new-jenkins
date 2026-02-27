@@ -1,42 +1,33 @@
 pipeline {
     agent any
 
+    // 1. Definisikan parameter yang bisa diisi manual oleh user saat nge-klik "Build with Parameters"
+    parameters {
+        string(name: 'PESAN_BEBAS', defaultValue: 'Halo dari Jenkins pakai Docker Compose!', description: 'Ketik pesan apa saja yang mau ditampilkan di web API')
+    }
+
     environment {
-        // Nama image docker (bebas, asal nyambung aja)
-        IMAGE_NAME = "hello-jenkins-api"
-        // Port yang mau di-publish ke luaran:port internal docker
-        PORT_MAPPING = "8000:8000"
+        // 2. Hubungkan Parameter Jenkins ke Environment Variable system
+        MESSAGE = "${params.PESAN_BEBAS}"
     }
 
     stages {
         stage('Ambil Kode') {
             steps {
-                echo "Mengambil kode dari GitHub..."
-                // Karena kita akan set URL GitHub-nya di settingan Job nanti, 
-                // Jenkins otomatis nge-pull kodenya di tahap awal ini tanpa perlu checkout manual lagi.
+                echo "Source Code ditarik otomatis oleh Jenkins dari GitHub..."
                 sh 'ls -la'
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build & Deploy with Docker Compose') {
             steps {
-                echo "Mulai proses build Docker Image..."
-                sh "docker build -t ${IMAGE_NAME} ."
-            }
-        }
-
-        stage('Deploy (Jalankan Container)') {
-            steps {
-                echo "Menjalankan aplikasi di dalam Docker Container..."
+                echo "Bikin Image dan Langsung Jalanin Container pakai Compose!"
                 
-                // Mencegah error kalau nama container yang sama sudah nyala dari nge-build sebelumnya
-                sh "docker stop ${IMAGE_NAME} || true"
-                sh "docker rm ${IMAGE_NAME} || true"
+                // Matikan service lama kalau ada, lalu build ulang dan jalankan (-d)
+                sh 'docker compose down'
+                sh 'docker compose up -d --build'
                 
-                // Jalanin containernya di background (-d)
-                sh "docker run -d --name ${IMAGE_NAME} -p ${PORT_MAPPING} ${IMAGE_NAME}"
-                
-                echo "🚀 Deploy Selesai! API menyala di port 8000"
+                echo "🚀 Aplikasi berhasil dijalankan dengan pesan kustom: ${MESSAGE}"
             }
         }
     }
