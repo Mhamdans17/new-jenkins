@@ -49,7 +49,33 @@ def read_root():
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Kalkulator Umur Kekinian</title>
+        
+        <!-- SEO Primary Meta Tags -->
+        <title>Kalkulator Umur Online | Hitung Usia Akurat & Cepat</title>
+        <meta name="title" content="Kalkulator Umur Online | Hitung Usia Akurat & Cepat">
+        <meta name="description" content="Hitung umur kamu secara akurat berdasarkan tahun, bulan, dan tanggal lahir secara gratis dengan kalkulator umur online paling kekinian tahun ini. Cepat dan instan!">
+        <meta name="keywords" content="hitung umur, kalkulator umur, hitung usia, umur saya berapa, umur berjalan, cek umur, kalkulator usia online, tahun lahir">
+        <meta name="author" content="ImTokyoDev">
+        <meta name="robots" content="index, follow">
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://umur.imtokyodev.cloud/">
+        <meta property="og:title" content="Kalkulator Umur Online Kekinian">
+        <meta property="og:description" content="Hitung umur kamu secara akurat berdasarkan tahun, bulan, dan tanggal lahir. Gratis tanpa iklan!">
+        
+        <!-- JSON-LD Structured Data for Google -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "Kalkulator Umur Kekinian",
+          "description": "Aplikasi Web untuk menghitung umur dengan akurasi tahun dan bulan berdasarkan tanggal lahir.",
+          "applicationCategory": "UtilitiesApplication",
+          "operatingSystem": "All"
+        }
+        </script>
+
         <script src="https://cdn.tailwindcss.com"></script>
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
@@ -89,11 +115,11 @@ def read_root():
     </head>
     <body class="p-4">
 
-        <div class="glass-panel p-8 md:p-10 max-w-lg w-full text-center">
-            <h1 class="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-blue-400">
+        <main class="glass-panel p-8 md:p-10 max-w-lg w-full text-center" itemscope itemtype="https://schema.org/SoftwareApplication">
+            <h1 itemprop="name" class="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-blue-400">
                 ⏳ Kalkulator Umur
             </h1>
-            <p class="text-sm text-gray-300 mb-8 tracking-wide">Microservice Python FastAPI + Docker</p>
+            <p itemprop="description" class="text-sm text-gray-300 mb-8 tracking-wide">Hitung usia pasti kamu di tahun berjalan, 100% Akurat!</p>
 
             <form id="ageForm" class="space-y-6">
                 <div class="flex flex-col text-left">
@@ -124,7 +150,7 @@ def read_root():
                 </div>
             </div>
             
-        </div>
+        </main>
 
         <script>
             document.getElementById('ageForm').addEventListener('submit', async (e) => {
