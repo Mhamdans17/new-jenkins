@@ -20,6 +20,12 @@ services:
       - "6379:6379"
     restart: unless-stopped
 
+  umur_api:
+    build: 
+      context: ./age-app
+    container_name: umur-api
+    restart: unless-stopped
+
   caddy:
     image: caddy:latest
     container_name: caddy-proxy

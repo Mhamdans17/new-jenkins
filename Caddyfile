@@ -1,3 +1,7 @@
 apitokyo.imtokyodev.cloud {
     reverse_proxy api:8000
 }
+
+umur.imtokyodev.cloud {
+    reverse_proxy umur_api:8000
+}
