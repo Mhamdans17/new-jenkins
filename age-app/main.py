@@ -1,9 +1,13 @@
+import redis
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from datetime import date
 
 app = FastAPI(title="API Kalkulator Umur Modern")
+
+# Koneksi ke Redis
+cache = redis.Redis(host='redis', port=6379, decode_responses=True)
 
 class UmurRequest(BaseModel):
     tahun: int
@@ -43,6 +47,11 @@ def hitung_umur_get(tahun: int, bulan: int, tanggal: int):
 
 @app.get("/", response_class=HTMLResponse)
 def read_root():
+    try:
+        kunjungan = cache.incr('hits_umur')
+    except redis.exceptions.ConnectionError:
+        kunjungan = "Error (Redis Mati)"
+
     html_content = """
     <!DOCTYPE html>
     <html lang="id">
@@ -119,7 +128,14 @@ def read_root():
             <h1 itemprop="name" class="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-blue-400">
                 ⏳ Kalkulator Umur
             </h1>
-            <p itemprop="description" class="text-sm text-gray-300 mb-8 tracking-wide">Hitung usia pasti kamu di tahun berjalan, 100% Akurat!</p>
+            <p itemprop="description" class="text-sm text-gray-300 mb-6 tracking-wide">Hitung usia pasti kamu di tahun berjalan, 100% Akurat!</p>
+
+            <div class="mb-8 bg-black/20 rounded-full py-1.5 px-4 inline-block border border-white/10 shadow-inner">
+                <span class="text-xs text-gray-300 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    Telah diuji oleh <strong class="text-green-300 ml-1">{KUNJUNGAN_COUNT}</strong> orang
+                </span>
+            </div>
 
             <form id="ageForm" class="space-y-6">
                 <div class="flex flex-col text-left">
@@ -219,4 +235,4 @@ def read_root():
     </body>
     </html>
     """
-    return html_content
+    return html_content.replace("{KUNJUNGAN_COUNT}", str(kunjungan))
