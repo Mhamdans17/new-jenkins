@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html class="light" lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Age Calculator - Gen Z Edition</title>
+
+    <!-- SEO Meta -->
+    <meta name="description" content="Hitung umur lu sekarang juga. UI Neo-Brutalism paling kece se-internet raya.">
+    <meta property="og:title" content="Age Calculator - Gen Z Edition">
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "neon-lime": "#ccff00",
+                        "base-blue": "#0000ff",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#050505",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .grid-bg {
+            background-image: radial-gradient(circle at 2px 2px, rgba(0, 0, 255, 0.15) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .neo-brutalism-shadow {
+            box-shadow: 8px 8px 0px 0px #0000ff;
+        }
+
+        .neo-brutalism-shadow-lime {
+            box-shadow: 6px 6px 0px 0px #ccff00;
+        }
+
+        ::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body
+    class="font-display bg-background-light dark:bg-background-dark min-h-screen grid-bg flex flex-col items-center justify-center p-6 selection:bg-neon-lime selection:text-base-blue">
+    <!-- Background Gradient Accent -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-base-blue/20 blur-[120px] rounded-full"></div>
+        <div class="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-neon-lime/10 blur-[120px] rounded-full">
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="w-full max-w-md mt-6">
+        <!-- Header Branding -->
+        <div class="flex items-center justify-center mb-8">
+            <div
+                class="bg-base-blue text-white px-4 py-1 rotate-[-2deg] font-black text-xl tracking-tighter uppercase italic border-2 border-black hover:rotate-2 transition-transform cursor-pointer">
+                Age Calculator
+            </div>
+        </div>
+
+        <!-- Live Badge Kustom Redis -->
+        <div class="flex items-center justify-center mb-6">
+            <span
+                class="bg-neon-lime text-base-blue px-3 py-1 font-black text-xs uppercase tracking-tighter border-2 border-base-blue rounded-full shadow-[2px_2px_0_0_#000f]">
+                💥 {{ kunjungan }} HITS
+            </span>
+        </div>
+
+        <!-- Glassmorphism Card -->
+        <div class="glass-card rounded-xl p-8 shadow-2xl relative overflow-hidden bg-white/40">
+            <!-- Decorative corner -->
+            <div
+                class="absolute top-0 right-0 w-16 h-16 bg-neon-lime opacity-30 rotate-45 translate-x-8 -translate-y-8">
+            </div>
+
+            <div class="flex flex-col gap-8 relative z-10">
+                <form id="ageForm" class="space-y-6">
+                    <!-- Input Section -->
+                    <div class="space-y-4">
+                        <label
+                            class="block text-base-blue font-black text-2xl tracking-tighter uppercase italic text-center drop-shadow-sm">
+                            BERAPA UMUR LO?
+                        </label>
+                        <div class="relative group">
+                            <!-- Diupdate pakai type=date biar muncul kalender native -->
+                            <input id="tanggalLahir" required
+                                class="w-full bg-white dark:bg-slate-900 border-4 border-base-blue p-5 text-xl font-bold focus:ring-0 focus:outline-none dark:text-white neo-brutalism-shadow transition-transform active:translate-x-1 active:translate-y-1 active:shadow-none"
+                                type="date" />
+                        </div>
+                    </div>
+
+                    <!-- Action Button -->
+                    <button type="submit" id="hitungBtn"
+                        class="w-full bg-neon-lime hover:bg-[#b8e600] text-base-blue font-black text-2xl py-6 border-4 border-black uppercase tracking-widest transition-all neo-brutalism-shadow hover:translate-x-[-2px] hover:translate-y-[-2px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none">
+                        GAS HITUNG!
+                    </button>
+                </form>
+
+                <!-- Results Section (Mula2 Disembunyikan) -->
+                <div id="resultBox" class="pt-8 border-t border-dashed border-base-blue/50 mt-4 hidden">
+                    <div class="space-y-2 text-center">
+                        <p class="text-base-blue text-xs font-black uppercase tracking-[0.2em]">Hasil Validasi Bumi</p>
+                        <div class="flex flex-col py-4">
+                            <h2 class="text-5xl md:text-6xl font-black text-slate-900 leading-[0.9] tracking-tighter uppercase transition-all"
+                                id="hasilTahun">
+                                - TAHUN<br />
+                            </h2>
+                            <h2 class="text-4xl md:text-5xl font-black text-base-blue leading-[1.1] tracking-tighter uppercase transition-all"
+                                id="hasilBulan">
+                                - BULAN
+                            </h2>
+                        </div>
+                        <div class="pt-2 flex items-center justify-center gap-2">
+                            <span id="labelTipe"
+                                class="bg-base-blue text-neon-lime px-3 py-1 font-black text-xs uppercase tracking-tighter border-2 border-black rotate-[2deg] hover:-rotate-2 transition-all cursor-crosshair">
+                                CERTIFIED EARTH CITIZEN
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Footer Stats -->
+        <div
+            class="mt-8 mb-4 flex justify-between items-center opacity-70 hover:opacity-100 transition-all cursor-default">
+            <div class="text-[10px] font-black uppercase text-base-blue leading-tight">
+                Data processed<br />in real-time
+            </div>
+            <div class="h-[2px] flex-grow mx-4 bg-base-blue"></div>
+            <div class="text-[10px] font-black uppercase text-base-blue leading-tight text-right">
+                © 2026 Gen Z<br />Tokyo Coder.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('ageForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const dobInput = document.getElementById('tanggalLahir').value;
+            if (!dobInput) return;
+
+            const btn = document.getElementById('hitungBtn');
+            const resultBox = document.getElementById('resultBox');
+
+            // Efek Loading Brutalism
+            btn.innerHTML = "MIKIR DULU... 🤔";
+            btn.style.backgroundColor = "#ff00ff"; // Pink mentereng
+            btn.style.color = "#fff";
+            btn.classList.add('animate-pulse');
+
+            const dateObj = new Date(dobInput);
+
+            try {
+                // Jeda buatan biar UI nge-lag berkelas
+                await new Promise(r => setTimeout(r, 800));
+
+                const response = await fetch(`/hitung?tahun=${dateObj.getFullYear()}&bulan=${dateObj.getMonth() + 1}&tanggal=${dateObj.getDate()}`);
+                const data = await response.json();
+
+                // Balikkan stlye button
+                btn.innerHTML = "GAS HITUNG!";
+                btn.style.backgroundColor = "";
+                btn.style.color = "";
+                btn.classList.remove('animate-pulse');
+
+                if (!response.ok) {
+                    alert('🔥 ' + (data.detail || 'Ada yang mbledos di server!'));
+                    return;
+                }
+
+                // Pecah string "XX Tahun, YY Bulan" buatan backend
+                const splits = data.hasil.split(',');
+                document.getElementById('hasilTahun').innerText = splits[0].trim().toUpperCase();
+                document.getElementById('hasilBulan').innerText = splits[1].trim().toUpperCase();
+
+                // Custom Badge ala Gen-Z Berdasarkan Demografi (Pew Research Center untuk 2026)
+                let title = "REMAJA JOMPO";
+                if (data.umur_tahun < 14) title = "GEN ALPHA: BOCIL KEMATIAN 🎮";
+                else if (data.umur_tahun <= 29) title = "GEN-Z TANGGUH 🎧";
+                else if (data.umur_tahun <= 45) title = "MILENIAL CAPEK ☕";
+                else title = "PUH SEPUH 🍵";
+
+                document.getElementById('labelTipe').innerText = title;
+
+                // Tampilkan Hasil
+                resultBox.classList.remove('hidden');
+
+            } catch (error) {
+                btn.innerHTML = "ERROR BANG!";
+                btn.classList.remove('animate-pulse');
+                alert("Server down anjir. Coba lagi ntar.");
+            }
+        });
+    </script>
+</body>
+
+</html>
