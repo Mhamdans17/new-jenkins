@@ -19,6 +19,9 @@ services:
     ports:
       - "6379:6379"
     restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
 
   umur_api:
     build: 
@@ -45,3 +48,4 @@ services:
 volumes:
   caddy_data:
   caddy_config:
+  redis_data:
