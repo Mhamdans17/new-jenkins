@@ -17,6 +17,7 @@ def hitung_umur_detail(tahun: int, bulan: int, tanggal: int):
 
     if today.day < birth_date.day:
         umur_bulan -= 1
+        
 
     if umur_bulan < 0:
         umur_tahun -= 1
